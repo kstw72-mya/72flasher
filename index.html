@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
   <title>72Flasher - Update Checker</title>
   <style>
     * {
@@ -249,7 +250,7 @@
           bannerTitle.textContent = 'Update Available!';
           bannerMsg.textContent =
             'Version ' + latestVersion + ' is available. You are running ' + CURRENT_VERSION + '.';
-          if (downloadUrl) {
+          if (downloadUrl && /^https:\/\//i.test(downloadUrl)) {
             downloadBtn.href = downloadUrl;
             downloadBtn.style.display = 'inline-block';
             downloadBtn.textContent = 'Download v' + latestVersion;
