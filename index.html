@@ -209,6 +209,7 @@
 
   <script>
     const CURRENT_VERSION = "1.0.0";
+    const DOWNLOAD_URL = "https://drive.google.com/file/d/10pmrZ4-crq4a5dGlPq9-b7pWAQGgLJWj/view?usp=drive_link";
 
     function compareVersions(current, latest) {
       const a = current.split('.').map(Number);
@@ -238,7 +239,6 @@
 
         const data = await response.json();
         const latestVersion = data.latest_version;
-        const downloadUrl = data.download_url;
 
         spinner.style.display = 'none';
         latestEl.textContent = latestVersion;
@@ -250,11 +250,9 @@
           bannerTitle.textContent = 'Update Available!';
           bannerMsg.textContent =
             'Version ' + latestVersion + ' is available. You are running ' + CURRENT_VERSION + '.';
-          if (downloadUrl && /^https:\/\//i.test(downloadUrl)) {
-            downloadBtn.href = downloadUrl;
-            downloadBtn.style.display = 'inline-block';
-            downloadBtn.textContent = 'Download v' + latestVersion;
-          }
+          downloadBtn.href = DOWNLOAD_URL;
+          downloadBtn.style.display = 'inline-block';
+          downloadBtn.textContent = 'Download v' + latestVersion;
           status.textContent = 'A newer version is available.';
         } else {
           banner.className = 'update-banner up-to-date';
