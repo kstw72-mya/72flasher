@@ -136,7 +136,37 @@
       border-left: 2px solid #1f6feb;
       border-radius: 6px;
       padding: 2px 8px;
+      margin-bottom: 6px;
     }
+
+    .owner-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .owner-name {
+      color: #8b949e;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .owner-divider {
+      color: rgba(139, 148, 158, 0.35);
+      font-size: 11px;
+    }
+
+    .owner-link {
+      color: #58a6ff;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.15s;
+    }
+    .owner-link:hover { color: #79c0ff; text-decoration: underline; }
 
     /* ── Download card ── */
     .download-card { padding: 18px 20px; }
@@ -279,13 +309,15 @@
 
         <!-- Branding -->
         <div class="glass-card brand-card">
-          <picture>
-            <source srcset="logo.png" type="image/png">
-            <img src="icon.ico" alt="72Flasher Icon" onerror="this.style.display='none'">
-          </picture>
+          <img src="icon.ico" alt="72Flasher Icon" onerror="this.style.display='none'">
           <div class="brand-info">
             <h1>72Flasher</h1>
-            <span class="section-label">fASTBOOT FLASH TOOL</span>
+            <span class="section-label">FASTBOOT FLASHER TOOL</span>
+            <div class="owner-row">
+              <span class="owner-name">Khant Sithu Win</span>
+              <span class="owner-divider">·</span>
+              <a class="owner-link" href="https://kstw72.qzz.io" target="_blank">kstw72.qzz.io</a>
+            </div>
           </div>
         </div>
 
