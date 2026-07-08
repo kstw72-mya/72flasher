@@ -3,17 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src https://fonts.gstatic.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src https://fonts.gstatic.com; connect-src 'self' https://raw.githubusercontent.com;">
   <link rel="icon" type="image/x-icon" href="icon.ico">
   <link rel="shortcut icon" type="image/x-icon" href="icon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <title>72Flasher - Update Checker</title>
+  <title>72Flasher - Download</title>
   <style>
-    *, *::before, *::after {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Segoe UI', 'Outfit', 'Inter', system-ui, sans-serif;
@@ -25,8 +23,7 @@
       color: #e6edf3;
     }
 
-    /* ── Shell / App Root ── */
-    .shell { padding: 14px; width: 100%; max-width: 520px; }
+    .shell { padding: 14px; width: 100%; max-width: 420px; }
 
     .app-root {
       background-color: #0d1117;
@@ -57,7 +54,7 @@
       font-size: 22px;
       font-weight: 700;
       letter-spacing: 0.5px;
-      font-family: 'Outfit', 'Inter', 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
       line-height: 1.1;
     }
 
@@ -66,65 +63,57 @@
       font-size: 11px;
       font-weight: 500;
       letter-spacing: 1.5px;
-      font-family: 'Outfit', 'Inter', 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
     }
 
-    /* ── macOS Traffic-light dots ── */
     .traffic-lights { display: flex; align-items: center; gap: 8px; padding: 0 4px; }
 
     .dot {
       width: 14px; height: 14px;
       border-radius: 50%;
       cursor: default;
-      transition: filter 0.15s;
     }
+    .dot.close { background: radial-gradient(circle at 50% 38%, #ff7b78, #ff605c); box-shadow: inset 0 0 0 0.8px #e54a47; }
+    .dot.min   { background: radial-gradient(circle at 50% 38%, #ffd06e, #ffbd44); box-shadow: inset 0 0 0 0.8px #e5a835; }
+    .dot.max   { background: radial-gradient(circle at 50% 38%, #34e070, #00ca4e); box-shadow: inset 0 0 0 0.8px #00b441; }
 
-    .dot.close {
-      background: radial-gradient(circle at 50% 38%, #ff7b78, #ff605c);
-      box-shadow: inset 0 0 0 0.8px #e54a47;
-    }
-    .dot.min {
-      background: radial-gradient(circle at 50% 38%, #ffd06e, #ffbd44);
-      box-shadow: inset 0 0 0 0.8px #e5a835;
-    }
-    .dot.max {
-      background: radial-gradient(circle at 50% 38%, #34e070, #00ca4e);
-      box-shadow: inset 0 0 0 0.8px #00b441;
-    }
-
-    /* ── Content Area ── */
-    .content { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+    /* ── Content ── */
+    .content { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 
     /* ── Glass Card ── */
     .glass-card {
       background: linear-gradient(to bottom, #1e242c, #191e26);
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 12px;
-      padding: 16px 20px;
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.26);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
     }
 
-    /* ── Logo card ── */
-    .logo-card { display: flex; align-items: center; gap: 14px; }
+    /* ── Branding card ── */
+    .brand-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+    }
 
-    .logo-card img {
-      width: 52px; height: 52px;
-      border-radius: 12px;
+    .brand-card img {
+      width: 48px; height: 48px;
+      border-radius: 10px;
       object-fit: contain;
       background: rgba(31, 111, 235, 0.08);
       border: 1px solid rgba(88, 166, 255, 0.15);
       padding: 4px;
     }
 
-    .logo-info h1 {
+    .brand-info h1 {
       color: #e6edf3;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
-    .author-chip {
+    .section-label {
       display: inline-block;
       color: #8b949e;
       font-size: 10px;
@@ -137,200 +126,117 @@
       padding: 2px 8px;
     }
 
-    /* ── Version cards ── */
-    .version-card {
-      background: linear-gradient(to bottom, #1e242c, #191e26);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      padding: 14px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22);
-    }
+    /* ── Download card ── */
+    .download-card { padding: 18px 20px; }
 
-    .version-label {
-      color: #8b949e;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.10em;
-    }
-
-    .version-value {
-      font-size: 22px;
-      font-weight: 700;
-      font-family: 'Outfit', monospace;
-      letter-spacing: 0.02em;
-    }
-
-    .version-value.current { color: #e3b341; }
-    .version-value.latest  { color: #3fb950; }
-
-    /* ── Status Chip ── */
-    .status-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: #8b949e;
-      background-color: rgba(22, 27, 34, 0.88);
-      border: 1px solid rgba(48, 54, 61, 0.9);
-      border-radius: 8px;
-      padding: 4px 12px;
-      font-size: 10px;
-      font-weight: 700;
-      min-height: 26px;
-      transition: all 0.3s ease;
-    }
-
-    .dot-indicator {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: currentColor;
-      flex-shrink: 0;
-    }
-
-    /* ── Update Banner ── */
-    .update-banner {
-      border-radius: 12px;
-      padding: 14px 18px;
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-      border: 1px solid;
-    }
-
-    .update-banner.needs-update {
-      display: flex;
-      background: linear-gradient(135deg, rgba(248, 81, 73, 0.12), rgba(110, 26, 26, 0.22));
-      border-color: rgba(248, 81, 73, 0.35);
-      border-left: 2px solid #f85149;
-      animation: pulse-red 2s infinite;
-    }
-
-    .update-banner.up-to-date {
-      display: flex;
-      background: linear-gradient(135deg, rgba(63, 185, 80, 0.10), rgba(13, 74, 58, 0.18));
-      border-color: rgba(46, 160, 67, 0.35);
-      border-left: 2px solid #3fb950;
-    }
-
-    .banner-header { display: flex; align-items: center; gap: 8px; }
-    .banner-icon { font-size: 16px; }
-    .update-banner h2 {
-      font-size: 13px;
-      font-weight: 700;
-      font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
-    }
-    .needs-update h2 { color: #ffa198; }
-    .up-to-date  h2 { color: #56d364; }
-    .update-banner p { font-size: 11px; color: #8b949e; line-height: 1.5; }
-
-    /* ── Download Button (PrimaryButton) ── */
-    .update-btn {
-      display: inline-block;
-      background-color: #1f6feb;
-      color: #ffffff;
-      border: 1px solid rgba(56, 139, 253, 0.5);
-      border-radius: 8px;
-      padding: 6px 18px;
-      font-size: 12px;
-      font-weight: 700;
-      font-family: 'Segoe UI', 'Outfit', system-ui, sans-serif;
-      letter-spacing: 0.03em;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s, border-color 0.15s;
-      align-self: flex-start;
-    }
-    .update-btn:hover { background-color: #388bfd; border-color: rgba(56, 139, 253, 0.8); }
-    .update-btn:active { background-color: #1158c7; }
-
-    /* ── Status Log Dock ── */
-    .status-bar {
-      background: linear-gradient(to bottom, #1a1f27, #151a21);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .progress-bar-track {
-      height: 4px;
-      background: rgba(48, 54, 61, 0.5);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: #1f6feb;
-      border-radius: 2px;
-      transition: width 0.4s ease;
-    }
-
-    .log-toolbar {
-      display: flex;
-      align-items: center;
-      padding: 6px 10px 4px 10px;
-      gap: 6px;
-    }
-
-    .log-label {
+    .download-label {
       color: #8b949e;
       font-size: 9px;
       font-weight: 700;
       letter-spacing: 0.10em;
-      flex: 1;
+      margin-bottom: 10px;
     }
 
-    .log-box {
-      font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
-      font-size: 11px;
-      color: #c9d1d9;
-      background: #0d1117;
-      padding: 6px 10px 10px 10px;
-      min-height: 52px;
-      max-height: 90px;
-      overflow-y: auto;
-      line-height: 1.6;
+    /* Loading state */
+    .loading-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
     }
 
-    .log-box::-webkit-scrollbar { width: 6px; }
-    .log-box::-webkit-scrollbar-track { background: transparent; }
-    .log-box::-webkit-scrollbar-thumb { background: rgba(48,54,61,0.9); border-radius: 3px; }
-    .log-box::-webkit-scrollbar-thumb:hover { background: rgba(110,118,129,0.8); }
-    .log-line { display: block; }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(139, 148, 158, 0.2);
+      border-top-color: #58a6ff;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      flex-shrink: 0;
+    }
 
-    /* ── Error ── */
-    .error-msg {
+    .loading-text {
+      color: #8b949e;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* ── Download Button (PrimaryButton style) ── */
+    .download-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background-color: #1f6feb;
+      color: #ffffff;
+      border: 1px solid rgba(56, 139, 253, 0.5);
+      border-radius: 8px;
+      padding: 11px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 18px rgba(31, 111, 235, 0.35);
+    }
+    .download-btn:hover {
+      background-color: #388bfd;
+      box-shadow: 0 6px 24px rgba(56, 139, 253, 0.45);
+    }
+    .download-btn:active { background-color: #1158c7; }
+
+    .btn-icon { font-size: 16px; }
+
+    .btn-sub {
+      font-size: 10px;
+      font-weight: 500;
+      opacity: 0.75;
+      letter-spacing: 0.05em;
+    }
+
+    /* Up-to-date state */
+    .uptodate-row {
       display: none;
-      color: #f85149;
-      font-size: 11px;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(63, 185, 80, 0.08);
+      border: 1px solid rgba(46, 160, 67, 0.3);
+      border-left: 2px solid #3fb950;
+      border-radius: 8px;
+    }
+
+    .uptodate-icon { font-size: 16px; color: #3fb950; }
+
+    .uptodate-text {
+      color: #56d364;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Error state */
+    .error-row {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
       background: rgba(248, 81, 73, 0.08);
       border: 1px solid rgba(248, 81, 73, 0.25);
       border-left: 2px solid #f85149;
       border-radius: 8px;
-      padding: 8px 12px;
-      font-family: 'Cascadia Code', 'Consolas', monospace;
     }
 
-    /* ── Spinner ── */
-    .spinner {
-      display: inline-block;
-      width: 18px; height: 18px;
-      border: 2px solid rgba(139, 148, 158, 0.25);
-      border-top-color: #58a6ff;
-      border-radius: 50%;
-      animation: spin 0.75s linear infinite;
-      vertical-align: middle;
+    .error-icon { font-size: 16px; color: #f85149; }
+
+    .error-text {
+      color: #f85149;
+      font-size: 11px;
+      font-weight: 500;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    @keyframes pulse-red {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.0); }
-      50%       { box-shadow: 0 0 18px 4px rgba(248, 81, 73, 0.15); }
-    }
   </style>
 </head>
 <body>
@@ -353,55 +259,43 @@
       <!-- Content -->
       <div class="content">
 
-        <!-- Logo + App Info -->
-        <div class="glass-card logo-card">
+        <!-- Branding -->
+        <div class="glass-card brand-card">
           <img src="icon.ico" alt="72Flasher Icon" onerror="this.style.display='none'">
-          <div class="logo-info">
-            <h1>Update Checker</h1>
-            <span class="author-chip">72FLASHER</span>
+          <div class="brand-info">
+            <h1>72Flasher</h1>
+            <span class="section-label">ANDROID FLASH TOOL</span>
           </div>
         </div>
 
-        <!-- Current Version -->
-        <div class="version-card">
-          <span class="version-label">CURRENT VERSION</span>
-          <span class="version-value current" id="currentVersion">1.0.0</span>
-        </div>
+        <!-- Download Card -->
+        <div class="glass-card download-card">
+          <div class="download-label">DOWNLOAD</div>
 
-        <!-- Latest Version -->
-        <div class="version-card">
-          <span class="version-label">LATEST VERSION</span>
-          <span class="version-value latest" id="latestVersion">
-            <span class="spinner" id="spinner"></span>
-          </span>
-        </div>
-
-        <!-- Update Banner -->
-        <div class="update-banner" id="updateBanner">
-          <div class="banner-header">
-            <span class="banner-icon" id="bannerIcon"></span>
-            <h2 id="bannerTitle"></h2>
+          <!-- Loading -->
+          <div class="loading-row" id="loadingRow">
+            <div class="spinner"></div>
+            <span class="loading-text">Fetching latest release...</span>
           </div>
-          <p id="bannerMessage"></p>
-          <a class="update-btn" id="downloadBtn" style="display:none;" target="_blank">Download Update</a>
-        </div>
 
-        <!-- Error -->
-        <div class="error-msg" id="errorMsg"></div>
+          <!-- Download Button (hidden until ready) -->
+          <a class="download-btn" id="downloadBtn" style="display:none;" target="_blank">
+            <span class="btn-icon">&#11123;</span>
+            <span id="btnLabel">Download 72Flasher</span>
+            <span class="btn-sub" id="btnSub"></span>
+          </a>
 
-        <!-- Status Log Dock -->
-        <div class="status-bar">
-          <div class="progress-bar-track">
-            <div class="progress-bar-fill" id="progressFill"></div>
+          <!-- Up to date -->
+          <div class="uptodate-row" id="uptodateRow">
+            <span class="uptodate-icon">&#10004;</span>
+            <span class="uptodate-text" id="uptodateText">You are running the latest version.</span>
           </div>
-          <div class="log-toolbar">
-            <span class="log-label">LOGS</span>
-            <div class="status-chip" id="statusChip">
-              <div class="dot-indicator"></div>
-              <span id="statusText">Checking for updates...</span>
-            </div>
+
+          <!-- Error -->
+          <div class="error-row" id="errorRow">
+            <span class="error-icon">&#9888;</span>
+            <span class="error-text" id="errorText">Unable to reach update server.</span>
           </div>
-          <div class="log-box" id="logBox"></div>
         </div>
 
       </div><!-- /content -->
@@ -410,107 +304,76 @@
 
   <script>
     const CURRENT_VERSION = "1.0.0";
-    const DOWNLOAD_URL = "https://drive.google.com/file/d/1OZudLQMyfUx4zi3Zro8p3x2vNTI7XXMk/view?usp=drive_link";
+    const FALLBACK_URL    = "https://drive.google.com/file/d/10pmrZ4-crq4a5dGlPq9-b7pWAQGgLJWj/view?usp=drive_link";
 
-    function log(text, color) {
-      const box = document.getElementById('logBox');
-      const line = document.createElement('span');
-      line.className = 'log-line';
-      line.style.color = color || '#c9d1d9';
-      line.textContent = text;
-      box.appendChild(line);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function setStatus(text, state) {
-      const chip = document.getElementById('statusChip');
-      document.getElementById('statusText').textContent = text;
-      const styles = {
-        connected:    { color:'#3fb950', bg:'rgba(46,160,67,0.12)',   border:'rgba(46,160,67,0.4)',   bl:'#3fb950' },
-        disconnected: { color:'#f85149', bg:'rgba(248,81,73,0.10)',   border:'rgba(248,81,73,0.35)',  bl:'#f85149' },
-        warning:      { color:'#e3b341', bg:'rgba(227,179,65,0.10)',  border:'rgba(227,179,65,0.35)', bl:'#e3b341' },
-        busy:         { color:'#58a6ff', bg:'rgba(88,166,255,0.10)',  border:'rgba(88,166,255,0.30)', bl:'#58a6ff' },
-      };
-      const s = styles[state] || styles.busy;
-      chip.style.color = s.color;
-      chip.style.backgroundColor = s.bg;
-      chip.style.border = '1px solid ' + s.border;
-      chip.style.borderLeft = '2px solid ' + s.bl;
-    }
-
-    function setProgress(pct) {
-      document.getElementById('progressFill').style.width = pct + '%';
-    }
+    const UPDATE_JSON_URLS = [
+      'https://raw.githubusercontent.com/kstw72-mya/72flasher/main/update.json',
+      'https://raw.githubusercontent.com/kstw72-mya/72flasher/master/update.json',
+      'update.json'
+    ];
 
     function compareVersions(current, latest) {
       const a = current.split('.').map(Number);
       const b = latest.split('.').map(Number);
       for (let i = 0; i < Math.max(a.length, b.length); i++) {
-        const x = a[i] || 0;
-        const y = b[i] || 0;
+        const x = a[i] || 0, y = b[i] || 0;
         if (x < y) return -1;
-        if (x > y) return 1;
+        if (x > y) return  1;
       }
       return 0;
     }
 
-    async function checkForUpdates() {
-      const latestEl    = document.getElementById('latestVersion');
-      const spinner     = document.getElementById('spinner');
-      const banner      = document.getElementById('updateBanner');
-      const bannerIcon  = document.getElementById('bannerIcon');
-      const bannerTitle = document.getElementById('bannerTitle');
-      const bannerMsg   = document.getElementById('bannerMessage');
-      const downloadBtn = document.getElementById('downloadBtn');
-      const errorMsg    = document.getElementById('errorMsg');
+    async function fetchWithFallback(urls) {
+      let lastErr;
+      for (const url of urls) {
+        try {
+          const resp = await fetch(url, { cache: 'no-store' });
+          if (!resp.ok) throw new Error('HTTP ' + resp.status);
+          return await resp.json();
+        } catch (e) { lastErr = e; }
+      }
+      throw lastErr || new Error('All sources failed');
+    }
 
-      setStatus('Checking for updates...', 'busy');
-      setProgress(30);
-      log('Fetching update.json...', '#8b949e');
+    async function checkForUpdates() {
+      const loadingRow  = document.getElementById('loadingRow');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const btnLabel    = document.getElementById('btnLabel');
+      const btnSub      = document.getElementById('btnSub');
+      const uptodateRow = document.getElementById('uptodateRow');
+      const uptodateText= document.getElementById('uptodateText');
+      const errorRow    = document.getElementById('errorRow');
+      const errorText   = document.getElementById('errorText');
 
       try {
-        const response = await fetch('update.json');
-        if (!response.ok) throw new Error('Failed to fetch update.json (HTTP ' + response.status + ')');
-
-        setProgress(70);
-        const data = await response.json();
+        const data          = await fetchWithFallback(UPDATE_JSON_URLS);
         const latestVersion = data.latest_version;
+        const releaseUrl    = data.download_url || FALLBACK_URL;
+        const cmp           = compareVersions(CURRENT_VERSION, latestVersion);
 
-        spinner.remove();
-        latestEl.textContent = latestVersion;
-        setProgress(100);
-        log('Fetched latest version: ' + latestVersion, '#7dd3fc');
-
-        const cmp = compareVersions(CURRENT_VERSION, latestVersion);
+        loadingRow.style.display = 'none';
 
         if (cmp < 0) {
-          banner.className = 'update-banner needs-update';
-          bannerIcon.textContent = '\u26A0';
-          bannerTitle.textContent = 'Update Available!';
-          bannerMsg.textContent = 'Version ' + latestVersion + ' is available. You are running ' + CURRENT_VERSION + '.';
-          downloadBtn.href = DOWNLOAD_URL;
-          downloadBtn.style.display = 'inline-block';
-          downloadBtn.textContent = 'Download v' + latestVersion;
-          setStatus('Update available \u2014 v' + latestVersion, 'warning');
-          log('A newer version is available: v' + latestVersion, '#e3b341');
+          // Update available — show download button
+          downloadBtn.href       = releaseUrl;
+          btnLabel.textContent   = 'Download v' + latestVersion;
+          btnSub.textContent     = 'Latest release';
+          downloadBtn.style.display = 'flex';
         } else {
-          banner.className = 'update-banner up-to-date';
-          bannerIcon.textContent = '\u2714';
-          bannerTitle.textContent = "You're Up to Date!";
-          bannerMsg.textContent = 'You are running the latest version (' + CURRENT_VERSION + ').';
-          downloadBtn.style.display = 'none';
-          setStatus('No updates needed', 'connected');
-          log('Running latest version: v' + CURRENT_VERSION, '#3fb950');
+          // Up to date
+          uptodateText.textContent = 'You are on the latest version (v' + CURRENT_VERSION + ').';
+          uptodateRow.style.display = 'flex';
         }
 
       } catch (err) {
-        if (document.getElementById('spinner')) spinner.remove();
-        latestEl.textContent = '\u2014';
-        setProgress(0);
-        errorMsg.style.display = 'block';
-        errorMsg.textContent = '\u26A0  ' + err.message;
-        setStatus('Update check failed', 'disconnected');
-        log('Error: ' + err.message, '#f85149');
+        // Error — show fallback download button anyway
+        loadingRow.style.display  = 'none';
+        downloadBtn.href          = FALLBACK_URL;
+        btnLabel.textContent      = 'Download 72Flasher';
+        btnSub.textContent        = '';
+        downloadBtn.style.display = 'flex';
+        errorText.textContent     = 'Could not check for updates. Showing last known download.';
+        errorRow.style.display    = 'flex';
       }
     }
 
@@ -518,3 +381,4 @@
   </script>
 </body>
 </html>
+
