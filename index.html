@@ -168,6 +168,27 @@
     }
     .owner-link:hover { color: #79c0ff; text-decoration: underline; }
 
+    /* ── Website Icon Button (tool WebsiteButton style) ── */
+    .website-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(88, 166, 255, 0.08);
+      border: 1px solid rgba(88, 166, 255, 0.22);
+      color: #58a6ff;
+      text-decoration: none;
+      transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+      flex-shrink: 0;
+    }
+    .website-btn:hover {
+      background: rgba(88, 166, 255, 0.18);
+      border-color: rgba(88, 166, 255, 0.55);
+      box-shadow: 0 0 12px rgba(88, 166, 255, 0.25);
+    }
+    .website-btn svg { width: 16px; height: 16px; }
+
     /* ── Download card ── */
     .download-card { padding: 18px 20px; }
 
@@ -291,16 +312,26 @@
           <img class="topbar-icon"
                src="icon.ico"
                alt="icon"
-               onerror="this.src='icon.ico'">
+               onerror="this.style.display='none'">
           <div class="brand-col">
             <span class="app-title">72FLASHER</span>
             <span class="app-subtitle">Khant Sithu Win</span>
           </div>
         </div>
-        <div class="traffic-lights">
-          <div class="dot min"   title="Minimize"></div>
-          <div class="dot max"   title="Maximize"></div>
-          <div class="dot close" title="Close"></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <!-- Website Icon Button -->
+          <a class="website-btn" href="https://kstw72.qzz.io" target="_blank" title="kstw72.qzz.io">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </a>
+          <div class="traffic-lights">
+            <div class="dot min"   title="Minimize"></div>
+            <div class="dot max"   title="Maximize"></div>
+            <div class="dot close" title="Close"></div>
+          </div>
         </div>
       </div>
 
@@ -309,14 +340,11 @@
 
         <!-- Branding -->
         <div class="glass-card brand-card">
-          <img src="icon.ico" alt="72Flasher Icon" onerror="this.style.display='none'">
           <div class="brand-info">
             <h1>72Flasher</h1>
             <span class="section-label">FASTBOOT FLASHER TOOL</span>
             <div class="owner-row">
               <span class="owner-name">Khant Sithu Win</span>
-              <span class="owner-divider">·</span>
-              <a class="owner-link" href="https://kstw72.qzz.io" target="_blank">kstw72.qzz.io</a>
             </div>
           </div>
         </div>
