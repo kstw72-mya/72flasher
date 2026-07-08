@@ -3,213 +3,444 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src https://fonts.gstatic.com;">
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="icon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <title>72Flasher - Update Checker</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      font-family: 'Segoe UI', 'Outfit', 'Inter', system-ui, sans-serif;
+      background: #0d1117;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
+      color: #e6edf3;
     }
 
-    .container {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    /* ── Shell / App Root ── */
+    .shell { padding: 14px; width: 100%; max-width: 520px; }
+
+    .app-root {
+      background-color: #0d1117;
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 20px;
-      padding: 40px;
-      max-width: 480px;
-      width: 90%;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      box-shadow: 0 28px 56px rgba(0, 0, 0, 0.55);
     }
 
-    .logo {
-      margin-bottom: 12px;
+    /* ── Top Bar ── */
+    .top-bar {
+      background: linear-gradient(to bottom, #1e242c, #181d24);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+      border-radius: 14px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 14px 14px 0 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
     }
 
-    .logo img {
-      width: 120px;
-      height: auto;
-      border-radius: 16px;
-    }
+    .brand-col { display: flex; flex-direction: column; gap: 1px; }
 
-    .author {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.5);
-      margin-bottom: 24px;
-      font-style: italic;
-    }
-
-    h1 {
-      font-size: 28px;
-      margin-bottom: 4px;
+    .app-title {
+      color: #60a5fa;
+      font-size: 22px;
       font-weight: 700;
+      letter-spacing: 0.5px;
+      font-family: 'Outfit', 'Inter', 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.1;
     }
 
-    .subtitle {
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 14px;
+    .app-subtitle {
+      color: rgba(56, 189, 248, 0.85);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      font-family: 'Outfit', 'Inter', 'Segoe UI', system-ui, sans-serif;
+    }
+
+    /* ── macOS Traffic-light dots ── */
+    .traffic-lights { display: flex; align-items: center; gap: 8px; padding: 0 4px; }
+
+    .dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      cursor: default;
+      transition: filter 0.15s;
+    }
+
+    .dot.close {
+      background: radial-gradient(circle at 50% 38%, #ff7b78, #ff605c);
+      box-shadow: inset 0 0 0 0.8px #e54a47;
+    }
+    .dot.min {
+      background: radial-gradient(circle at 50% 38%, #ffd06e, #ffbd44);
+      box-shadow: inset 0 0 0 0.8px #e5a835;
+    }
+    .dot.max {
+      background: radial-gradient(circle at 50% 38%, #34e070, #00ca4e);
+      box-shadow: inset 0 0 0 0.8px #00b441;
+    }
+
+    /* ── Content Area ── */
+    .content { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+
+    /* ── Glass Card ── */
+    .glass-card {
+      background: linear-gradient(to bottom, #1e242c, #191e26);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.26);
+    }
+
+    /* ── Logo card ── */
+    .logo-card { display: flex; align-items: center; gap: 14px; }
+
+    .logo-card img {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      object-fit: contain;
+      background: rgba(31, 111, 235, 0.08);
+      border: 1px solid rgba(88, 166, 255, 0.15);
+      padding: 4px;
+    }
+
+    .logo-info h1 {
+      color: #e6edf3;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
       margin-bottom: 4px;
     }
 
+    .author-chip {
+      display: inline-block;
+      color: #8b949e;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      background-color: rgba(22, 27, 34, 0.7);
+      border: 1px solid rgba(48, 54, 61, 0.8);
+      border-left: 2px solid #1f6feb;
+      border-radius: 6px;
+      padding: 2px 8px;
+    }
+
+    /* ── Version cards ── */
     .version-card {
-      background: rgba(255, 255, 255, 0.08);
+      background: linear-gradient(to bottom, #1e242c, #191e26);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
+      padding: 14px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22);
     }
 
     .version-label {
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.6);
-      text-align: left;
+      color: #8b949e;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
     }
 
     .version-value {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
-      text-align: right;
+      font-family: 'Outfit', monospace;
+      letter-spacing: 0.02em;
     }
 
-    .version-value.current {
-      color: #ffa726;
+    .version-value.current { color: #e3b341; }
+    .version-value.latest  { color: #3fb950; }
+
+    /* ── Status Chip ── */
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #8b949e;
+      background-color: rgba(22, 27, 34, 0.88);
+      border: 1px solid rgba(48, 54, 61, 0.9);
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 10px;
+      font-weight: 700;
+      min-height: 26px;
+      transition: all 0.3s ease;
     }
 
-    .version-value.latest {
-      color: #66bb6a;
+    .dot-indicator {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
     }
 
+    /* ── Update Banner ── */
     .update-banner {
-      margin-top: 24px;
-      padding: 20px;
       border-radius: 12px;
+      padding: 14px 18px;
       display: none;
+      flex-direction: column;
+      gap: 8px;
+      border: 1px solid;
     }
 
     .update-banner.needs-update {
-      display: block;
-      background: linear-gradient(135deg, #ff6b35, #f7931e);
-      animation: pulse 2s infinite;
+      display: flex;
+      background: linear-gradient(135deg, rgba(248, 81, 73, 0.12), rgba(110, 26, 26, 0.22));
+      border-color: rgba(248, 81, 73, 0.35);
+      border-left: 2px solid #f85149;
+      animation: pulse-red 2s infinite;
     }
 
     .update-banner.up-to-date {
-      display: block;
-      background: linear-gradient(135deg, #43a047, #66bb6a);
+      display: flex;
+      background: linear-gradient(135deg, rgba(63, 185, 80, 0.10), rgba(13, 74, 58, 0.18));
+      border-color: rgba(46, 160, 67, 0.35);
+      border-left: 2px solid #3fb950;
     }
 
+    .banner-header { display: flex; align-items: center; gap: 8px; }
+    .banner-icon { font-size: 16px; }
     .update-banner h2 {
-      font-size: 18px;
-      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
     }
+    .needs-update h2 { color: #ffa198; }
+    .up-to-date  h2 { color: #56d364; }
+    .update-banner p { font-size: 11px; color: #8b949e; line-height: 1.5; }
 
-    .update-banner p {
-      font-size: 14px;
-      opacity: 0.9;
-      margin-bottom: 16px;
-    }
-
+    /* ── Download Button (PrimaryButton) ── */
     .update-btn {
       display: inline-block;
-      background: rgba(255, 255, 255, 0.25);
-      color: #fff;
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      padding: 10px 28px;
+      background-color: #1f6feb;
+      color: #ffffff;
+      border: 1px solid rgba(56, 139, 253, 0.5);
       border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
+      padding: 6px 18px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Segoe UI', 'Outfit', system-ui, sans-serif;
+      letter-spacing: 0.03em;
       cursor: pointer;
       text-decoration: none;
-      transition: background 0.2s;
+      transition: background 0.15s, border-color 0.15s;
+      align-self: flex-start;
+    }
+    .update-btn:hover { background-color: #388bfd; border-color: rgba(56, 139, 253, 0.8); }
+    .update-btn:active { background-color: #1158c7; }
+
+    /* ── Status Log Dock ── */
+    .status-bar {
+      background: linear-gradient(to bottom, #1a1f27, #151a21);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      overflow: hidden;
     }
 
-    .update-btn:hover {
-      background: rgba(255, 255, 255, 0.4);
+    .progress-bar-track {
+      height: 4px;
+      background: rgba(48, 54, 61, 0.5);
+      border-radius: 2px;
+      overflow: hidden;
     }
 
-    .status {
-      margin-top: 20px;
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.4);
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #1f6feb;
+      border-radius: 2px;
+      transition: width 0.4s ease;
     }
 
-    .error {
-      color: #ef5350;
-      margin-top: 16px;
-      font-size: 14px;
+    .log-toolbar {
+      display: flex;
+      align-items: center;
+      padding: 6px 10px 4px 10px;
+      gap: 6px;
+    }
+
+    .log-label {
+      color: #8b949e;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      flex: 1;
+    }
+
+    .log-box {
+      font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+      font-size: 11px;
+      color: #c9d1d9;
+      background: #0d1117;
+      padding: 6px 10px 10px 10px;
+      min-height: 52px;
+      max-height: 90px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+
+    .log-box::-webkit-scrollbar { width: 6px; }
+    .log-box::-webkit-scrollbar-track { background: transparent; }
+    .log-box::-webkit-scrollbar-thumb { background: rgba(48,54,61,0.9); border-radius: 3px; }
+    .log-box::-webkit-scrollbar-thumb:hover { background: rgba(110,118,129,0.8); }
+    .log-line { display: block; }
+
+    /* ── Error ── */
+    .error-msg {
       display: none;
+      color: #f85149;
+      font-size: 11px;
+      background: rgba(248, 81, 73, 0.08);
+      border: 1px solid rgba(248, 81, 73, 0.25);
+      border-left: 2px solid #f85149;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
     }
 
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4); }
-      50% { box-shadow: 0 0 20px 4px rgba(255, 107, 53, 0.2); }
-    }
-
+    /* ── Spinner ── */
     .spinner {
       display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-top-color: #fff;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(139, 148, 158, 0.25);
+      border-top-color: #58a6ff;
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 20px auto;
+      animation: spin 0.75s linear infinite;
+      vertical-align: middle;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.0); }
+      50%       { box-shadow: 0 0 18px 4px rgba(248, 81, 73, 0.15); }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo"><img src="logo.png" alt="72Flasher Logo"></div>
-    <h1>72Flasher</h1>
-    <p class="subtitle">Update Checker</p>
-    <p class="author">Khant Sithu Win</p>
+  <div class="shell">
+    <div class="app-root">
 
-    <div class="version-card">
-      <div>
-        <div class="version-label">Current Version</div>
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <div class="brand-col">
+          <span class="app-title">72FLASHER</span>
+          <span class="app-subtitle">Khant Sithu Win</span>
+        </div>
+        <div class="traffic-lights">
+          <div class="dot min"   title="Minimize"></div>
+          <div class="dot max"   title="Maximize"></div>
+          <div class="dot close" title="Close"></div>
+        </div>
       </div>
-      <div class="version-value current" id="currentVersion">1.0.0</div>
-    </div>
 
-    <div class="version-card">
-      <div>
-        <div class="version-label">Latest Version</div>
-      </div>
-      <div class="version-value latest" id="latestVersion">
-        <div class="spinner" id="spinner"></div>
-      </div>
-    </div>
+      <!-- Content -->
+      <div class="content">
 
-    <div class="update-banner" id="updateBanner">
-      <h2 id="bannerTitle"></h2>
-      <p id="bannerMessage"></p>
-      <a class="update-btn" id="downloadBtn" style="display:none;" target="_blank">Download Update</a>
-    </div>
+        <!-- Logo + App Info -->
+        <div class="glass-card logo-card">
+          <img src="icon.ico" alt="72Flasher Icon" onerror="this.style.display='none'">
+          <div class="logo-info">
+            <h1>Update Checker</h1>
+            <span class="author-chip">72FLASHER</span>
+          </div>
+        </div>
 
-    <div class="error" id="errorMsg"></div>
-    <div class="status" id="status">Checking for updates...</div>
-  </div>
+        <!-- Current Version -->
+        <div class="version-card">
+          <span class="version-label">CURRENT VERSION</span>
+          <span class="version-value current" id="currentVersion">1.0.0</span>
+        </div>
+
+        <!-- Latest Version -->
+        <div class="version-card">
+          <span class="version-label">LATEST VERSION</span>
+          <span class="version-value latest" id="latestVersion">
+            <span class="spinner" id="spinner"></span>
+          </span>
+        </div>
+
+        <!-- Update Banner -->
+        <div class="update-banner" id="updateBanner">
+          <div class="banner-header">
+            <span class="banner-icon" id="bannerIcon"></span>
+            <h2 id="bannerTitle"></h2>
+          </div>
+          <p id="bannerMessage"></p>
+          <a class="update-btn" id="downloadBtn" style="display:none;" target="_blank">Download Update</a>
+        </div>
+
+        <!-- Error -->
+        <div class="error-msg" id="errorMsg"></div>
+
+        <!-- Status Log Dock -->
+        <div class="status-bar">
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+          <div class="log-toolbar">
+            <span class="log-label">LOGS</span>
+            <div class="status-chip" id="statusChip">
+              <div class="dot-indicator"></div>
+              <span id="statusText">Checking for updates...</span>
+            </div>
+          </div>
+          <div class="log-box" id="logBox"></div>
+        </div>
+
+      </div><!-- /content -->
+    </div><!-- /app-root -->
+  </div><!-- /shell -->
 
   <script>
     const CURRENT_VERSION = "1.0.0";
     const DOWNLOAD_URL = "https://drive.google.com/file/d/10pmrZ4-crq4a5dGlPq9-b7pWAQGgLJWj/view?usp=drive_link";
+
+    function log(text, color) {
+      const box = document.getElementById('logBox');
+      const line = document.createElement('span');
+      line.className = 'log-line';
+      line.style.color = color || '#c9d1d9';
+      line.textContent = text;
+      box.appendChild(line);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function setStatus(text, state) {
+      const chip = document.getElementById('statusChip');
+      document.getElementById('statusText').textContent = text;
+      const styles = {
+        connected:    { color:'#3fb950', bg:'rgba(46,160,67,0.12)',   border:'rgba(46,160,67,0.4)',   bl:'#3fb950' },
+        disconnected: { color:'#f85149', bg:'rgba(248,81,73,0.10)',   border:'rgba(248,81,73,0.35)',  bl:'#f85149' },
+        warning:      { color:'#e3b341', bg:'rgba(227,179,65,0.10)',  border:'rgba(227,179,65,0.35)', bl:'#e3b341' },
+        busy:         { color:'#58a6ff', bg:'rgba(88,166,255,0.10)',  border:'rgba(88,166,255,0.30)', bl:'#58a6ff' },
+      };
+      const s = styles[state] || styles.busy;
+      chip.style.color = s.color;
+      chip.style.backgroundColor = s.bg;
+      chip.style.border = '1px solid ' + s.border;
+      chip.style.borderLeft = '2px solid ' + s.bl;
+    }
+
+    function setProgress(pct) {
+      document.getElementById('progressFill').style.width = pct + '%';
+    }
 
     function compareVersions(current, latest) {
       const a = current.split('.').map(Number);
@@ -224,49 +455,62 @@
     }
 
     async function checkForUpdates() {
-      const latestEl = document.getElementById('latestVersion');
-      const spinner = document.getElementById('spinner');
-      const banner = document.getElementById('updateBanner');
+      const latestEl    = document.getElementById('latestVersion');
+      const spinner     = document.getElementById('spinner');
+      const banner      = document.getElementById('updateBanner');
+      const bannerIcon  = document.getElementById('bannerIcon');
       const bannerTitle = document.getElementById('bannerTitle');
-      const bannerMsg = document.getElementById('bannerMessage');
+      const bannerMsg   = document.getElementById('bannerMessage');
       const downloadBtn = document.getElementById('downloadBtn');
-      const errorMsg = document.getElementById('errorMsg');
-      const status = document.getElementById('status');
+      const errorMsg    = document.getElementById('errorMsg');
+
+      setStatus('Checking for updates...', 'busy');
+      setProgress(30);
+      log('Fetching update.json...', '#8b949e');
 
       try {
         const response = await fetch('update.json');
-        if (!response.ok) throw new Error('Failed to fetch update.json');
+        if (!response.ok) throw new Error('Failed to fetch update.json (HTTP ' + response.status + ')');
 
+        setProgress(70);
         const data = await response.json();
         const latestVersion = data.latest_version;
 
-        spinner.style.display = 'none';
+        spinner.remove();
         latestEl.textContent = latestVersion;
+        setProgress(100);
+        log('Fetched latest version: ' + latestVersion, '#7dd3fc');
 
         const cmp = compareVersions(CURRENT_VERSION, latestVersion);
 
         if (cmp < 0) {
           banner.className = 'update-banner needs-update';
+          bannerIcon.textContent = '\u26A0';
           bannerTitle.textContent = 'Update Available!';
-          bannerMsg.textContent =
-            'Version ' + latestVersion + ' is available. You are running ' + CURRENT_VERSION + '.';
+          bannerMsg.textContent = 'Version ' + latestVersion + ' is available. You are running ' + CURRENT_VERSION + '.';
           downloadBtn.href = DOWNLOAD_URL;
           downloadBtn.style.display = 'inline-block';
           downloadBtn.textContent = 'Download v' + latestVersion;
-          status.textContent = 'A newer version is available.';
+          setStatus('Update available \u2014 v' + latestVersion, 'warning');
+          log('A newer version is available: v' + latestVersion, '#e3b341');
         } else {
           banner.className = 'update-banner up-to-date';
-          bannerTitle.textContent = 'You\'re Up to Date!';
+          bannerIcon.textContent = '\u2714';
+          bannerTitle.textContent = "You're Up to Date!";
           bannerMsg.textContent = 'You are running the latest version (' + CURRENT_VERSION + ').';
           downloadBtn.style.display = 'none';
-          status.textContent = 'No updates needed.';
+          setStatus('No updates needed', 'connected');
+          log('Running latest version: v' + CURRENT_VERSION, '#3fb950');
         }
+
       } catch (err) {
-        spinner.style.display = 'none';
-        latestEl.textContent = '—';
+        if (document.getElementById('spinner')) spinner.remove();
+        latestEl.textContent = '\u2014';
+        setProgress(0);
         errorMsg.style.display = 'block';
-        errorMsg.textContent = 'Error: ' + err.message;
-        status.textContent = 'Update check failed.';
+        errorMsg.textContent = '\u26A0  ' + err.message;
+        setStatus('Update check failed', 'disconnected');
+        log('Error: ' + err.message, '#f85149');
       }
     }
 
