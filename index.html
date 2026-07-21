@@ -8,96 +8,285 @@
   <link rel="shortcut icon" type="image/x-icon" href="icon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <title>72Flasher - Download</title>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Segoe UI', 'Outfit', 'Inter', system-ui, sans-serif;
-      background: #0d1117;
+      font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
+      background: #06060e;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #e6edf3;
+      color: #e2e8f0;
+      overflow: hidden;
+      position: relative;
     }
 
-    .shell { padding: 14px; width: 100%; max-width: 420px; }
+    /* ── Aurora Background ── */
+    .aurora-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .aurora-bg::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(88, 28, 195, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 75% 25%, rgba(14, 165, 233, 0.15) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 60% at 50% 80%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse 70% 30% at 85% 70%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+      animation: aurora-drift 12s ease-in-out infinite alternate;
+    }
+
+    .aurora-bg::after {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: -30%;
+      width: 160%;
+      height: 160%;
+      background:
+        radial-gradient(ellipse 55% 45% at 60% 30%, rgba(167, 139, 250, 0.13) 0%, transparent 55%),
+        radial-gradient(ellipse 45% 55% at 30% 65%, rgba(34, 211, 238, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 35% at 80% 55%, rgba(192, 132, 252, 0.08) 0%, transparent 45%);
+      animation: aurora-drift-reverse 15s ease-in-out infinite alternate;
+    }
+
+    /* Floating aurora orbs */
+    .aurora-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .aurora-orb:nth-child(1) {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.5), transparent 70%);
+      top: -10%; left: -5%;
+      animation: orb-float-1 18s ease-in-out infinite alternate;
+    }
+
+    .aurora-orb:nth-child(2) {
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.45), transparent 70%);
+      bottom: -8%; right: -5%;
+      animation: orb-float-2 14s ease-in-out infinite alternate;
+    }
+
+    .aurora-orb:nth-child(3) {
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.4), transparent 70%);
+      top: 50%; left: 60%;
+      animation: orb-float-3 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes aurora-drift {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(3%, -2%) rotate(4deg); }
+    }
+
+    @keyframes aurora-drift-reverse {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(-4%, 3%) rotate(-5deg); }
+    }
+
+    @keyframes orb-float-1 {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(60px, 40px) scale(1.15); }
+    }
+
+    @keyframes orb-float-2 {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-50px, -30px) scale(1.1); }
+    }
+
+    @keyframes orb-float-3 {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, -50px) scale(0.9); }
+    }
+
+    /* ── Main Shell ── */
+    .shell {
+      padding: 14px;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      z-index: 1;
+      animation: shell-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes shell-enter {
+      0% { opacity: 0; transform: translateY(30px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
     .app-root {
-      background-color: #0d1117;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 20px;
+      background: rgba(15, 15, 30, 0.55);
+      backdrop-filter: blur(40px) saturate(1.4);
+      -webkit-backdrop-filter: blur(40px) saturate(1.4);
+      border: 1px solid rgba(139, 92, 246, 0.12);
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 28px 56px rgba(0, 0, 0, 0.55);
+      box-shadow:
+        0 32px 64px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(139, 92, 246, 0.06) inset,
+        0 0 80px rgba(139, 92, 246, 0.04);
     }
 
     /* ── Top Bar ── */
     .top-bar {
-      background: linear-gradient(to bottom, #1e242c, #181d24);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.45);
-      border-radius: 14px;
+      background: rgba(20, 18, 40, 0.6);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(139, 92, 246, 0.1);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.06);
+      border-radius: 16px;
       padding: 8px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin: 14px 14px 0 14px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(167, 139, 250, 0.05) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle shimmer on top bar */
+    .top-bar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.04), transparent);
+      animation: shimmer 6s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { left: -100%; }
+      50% { left: 100%; }
     }
 
     .brand-col { display: flex; flex-direction: column; gap: 1px; }
 
-    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .topbar-left { display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; }
 
     .topbar-icon {
-      width: 32px; height: 32px;
-      border-radius: 8px;
+      width: 34px; height: 34px;
+      border-radius: 10px;
       object-fit: contain;
-      border: 1px solid rgba(88, 166, 255, 0.18);
-      background: rgba(31, 111, 235, 0.08);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      background: rgba(139, 92, 246, 0.08);
       padding: 3px;
       flex-shrink: 0;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .topbar-icon:hover {
+      border-color: rgba(167, 139, 250, 0.5);
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.2);
     }
 
     .app-title {
-      color: #60a5fa;
+      background: linear-gradient(135deg, #a78bfa, #818cf8, #67e8f9);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      font-weight: 800;
+      letter-spacing: 1px;
       font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
       line-height: 1.1;
+      animation: gradient-text 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes gradient-text {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
     }
 
     .app-subtitle {
-      color: rgba(56, 189, 248, 0.85);
+      background: linear-gradient(90deg, rgba(167, 139, 250, 0.85), rgba(34, 211, 238, 0.85));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 1.5px;
+      font-weight: 600;
+      letter-spacing: 1.8px;
       font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
     }
 
-    .traffic-lights { display: flex; align-items: center; gap: 8px; padding: 0 4px; }
+    .traffic-lights { display: flex; align-items: center; gap: 8px; padding: 0 4px; position: relative; z-index: 1; }
 
     .dot {
       width: 14px; height: 14px;
       border-radius: 50%;
       cursor: default;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .dot.close { background: radial-gradient(circle at 50% 38%, #ff7b78, #ff605c); box-shadow: inset 0 0 0 0.8px #e54a47; }
-    .dot.min   { background: radial-gradient(circle at 50% 38%, #ffd06e, #ffbd44); box-shadow: inset 0 0 0 0.8px #e5a835; }
-    .dot.max   { background: radial-gradient(circle at 50% 38%, #34e070, #00ca4e); box-shadow: inset 0 0 0 0.8px #00b441; }
+    .dot:hover { transform: scale(1.15); }
+    .dot.close {
+      background: radial-gradient(circle at 50% 38%, #ff7b78, #ff605c);
+      box-shadow: inset 0 0 0 0.8px #e54a47, 0 0 8px rgba(255, 96, 92, 0.3);
+    }
+    .dot.min {
+      background: radial-gradient(circle at 50% 38%, #ffd06e, #ffbd44);
+      box-shadow: inset 0 0 0 0.8px #e5a835, 0 0 8px rgba(255, 189, 68, 0.3);
+    }
+    .dot.max {
+      background: radial-gradient(circle at 50% 38%, #34e070, #00ca4e);
+      box-shadow: inset 0 0 0 0.8px #00b441, 0 0 8px rgba(0, 202, 78, 0.3);
+    }
 
     /* ── Content ── */
     .content { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 
     /* ── Glass Card ── */
     .glass-card {
-      background: linear-gradient(to bottom, #1e242c, #191e26);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
+      background: rgba(20, 18, 40, 0.45);
+      backdrop-filter: blur(20px) saturate(1.3);
+      -webkit-backdrop-filter: blur(20px) saturate(1.3);
+      border: 1px solid rgba(139, 92, 246, 0.1);
+      border-radius: 14px;
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(167, 139, 250, 0.04) inset;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(139, 92, 246, 0.2);
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(167, 139, 250, 0.08) inset,
+        0 0 30px rgba(139, 92, 246, 0.06);
+      transform: translateY(-1px);
+    }
+
+    /* Subtle glow line at top of cards */
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.3), rgba(34, 211, 238, 0.2), transparent);
     }
 
     /* ── Branding card ── */
@@ -105,37 +294,44 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 16px 20px;
+      padding: 18px 20px;
     }
 
     .brand-card img {
       width: 48px; height: 48px;
-      border-radius: 10px;
+      border-radius: 12px;
       object-fit: contain;
-      background: rgba(31, 111, 235, 0.08);
-      border: 1px solid rgba(88, 166, 255, 0.15);
+      background: rgba(139, 92, 246, 0.08);
+      border: 1px solid rgba(139, 92, 246, 0.2);
       padding: 4px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .brand-card img:hover {
+      border-color: rgba(167, 139, 250, 0.5);
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
     }
 
     .brand-info h1 {
-      color: #e6edf3;
+      color: #f1f5f9;
       font-size: 17px;
       font-weight: 700;
       font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
       margin-bottom: 3px;
+      text-shadow: 0 0 30px rgba(167, 139, 250, 0.15);
     }
 
     .section-label {
       display: inline-block;
-      color: #8b949e;
+      color: rgba(167, 139, 250, 0.9);
       font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.10em;
-      background-color: rgba(22, 27, 34, 0.7);
-      border: 1px solid rgba(48, 54, 61, 0.8);
-      border-left: 2px solid #1f6feb;
+      letter-spacing: 0.12em;
+      background: rgba(139, 92, 246, 0.08);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      border-left: 2px solid rgba(139, 92, 246, 0.6);
       border-radius: 6px;
-      padding: 2px 8px;
+      padding: 3px 10px;
       margin-bottom: 6px;
     }
 
@@ -148,7 +344,7 @@
     }
 
     .owner-name {
-      color: #8b949e;
+      color: rgba(203, 213, 225, 0.7);
       font-size: 11px;
       font-weight: 600;
     }
@@ -159,33 +355,40 @@
     }
 
     .owner-link {
-      color: #58a6ff;
+      background: linear-gradient(90deg, #a78bfa, #67e8f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       font-size: 11px;
       font-weight: 600;
       text-decoration: none;
       letter-spacing: 0.02em;
-      transition: color 0.15s;
+      transition: opacity 0.15s;
     }
-    .owner-link:hover { color: #79c0ff; text-decoration: underline; }
+    .owner-link:hover { opacity: 0.8; text-decoration: underline; }
 
-    /* ── Website Icon Button (tool WebsiteButton style) ── */
+    /* ── Website Icon Button ── */
     .website-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 32px; height: 32px;
+      width: 34px; height: 34px;
       border-radius: 50%;
-      background: rgba(88, 166, 255, 0.08);
-      border: 1px solid rgba(88, 166, 255, 0.22);
-      color: #58a6ff;
+      background: rgba(139, 92, 246, 0.08);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      color: #a78bfa;
       text-decoration: none;
-      transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+      transition: all 0.25s ease;
       flex-shrink: 0;
+      position: relative;
+      z-index: 1;
     }
     .website-btn:hover {
-      background: rgba(88, 166, 255, 0.18);
-      border-color: rgba(88, 166, 255, 0.55);
-      box-shadow: 0 0 12px rgba(88, 166, 255, 0.25);
+      background: rgba(139, 92, 246, 0.18);
+      border-color: rgba(167, 139, 250, 0.5);
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.3);
+      color: #c4b5fd;
+      transform: scale(1.08);
     }
     .website-btn svg { width: 16px; height: 16px; }
 
@@ -193,10 +396,10 @@
     .download-card { padding: 18px 20px; }
 
     .download-label {
-      color: #8b949e;
+      color: rgba(167, 139, 250, 0.6);
       font-size: 9px;
       font-weight: 700;
-      letter-spacing: 0.10em;
+      letter-spacing: 0.14em;
       margin-bottom: 10px;
     }
 
@@ -210,45 +413,76 @@
 
     .spinner {
       width: 16px; height: 16px;
-      border: 2px solid rgba(139, 148, 158, 0.2);
-      border-top-color: #58a6ff;
+      border: 2px solid rgba(139, 92, 246, 0.15);
+      border-top-color: #a78bfa;
       border-radius: 50%;
       animation: spin 0.75s linear infinite;
       flex-shrink: 0;
     }
 
     .loading-text {
-      color: #8b949e;
+      color: rgba(203, 213, 225, 0.6);
       font-size: 12px;
       font-weight: 500;
     }
 
-    /* ── Download Button (PrimaryButton style) ── */
+    /* ── Download Button ── */
     .download-btn {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       width: 100%;
-      background-color: #1f6feb;
+      background: linear-gradient(135deg, #7c3aed, #6366f1, #8b5cf6);
+      background-size: 200% 200%;
       color: #ffffff;
-      border: 1px solid rgba(56, 139, 253, 0.5);
-      border-radius: 8px;
-      padding: 11px 20px;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 10px;
+      padding: 12px 20px;
       font-size: 13px;
       font-weight: 700;
       font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
       cursor: pointer;
       text-decoration: none;
-      transition: background 0.15s, box-shadow 0.15s;
-      box-shadow: 0 4px 18px rgba(31, 111, 235, 0.35);
+      transition: all 0.25s ease;
+      box-shadow:
+        0 6px 24px rgba(124, 58, 237, 0.35),
+        0 0 0 1px rgba(139, 92, 246, 0.1) inset;
+      animation: btn-gradient 3s ease-in-out infinite alternate;
+      position: relative;
+      overflow: hidden;
     }
+
+    .download-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .download-btn:hover::before {
+      left: 100%;
+    }
+
+    @keyframes btn-gradient {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
     .download-btn:hover {
-      background-color: #388bfd;
-      box-shadow: 0 6px 24px rgba(56, 139, 253, 0.45);
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed, #a78bfa);
+      box-shadow:
+        0 8px 32px rgba(124, 58, 237, 0.45),
+        0 0 40px rgba(139, 92, 246, 0.15);
+      transform: translateY(-1px);
     }
-    .download-btn:active { background-color: #1158c7; }
+    .download-btn:active {
+      background: linear-gradient(135deg, #6d28d9, #5b21b6);
+      transform: translateY(0);
+    }
 
     .btn-icon { font-size: 16px; }
 
@@ -265,16 +499,18 @@
       align-items: center;
       gap: 10px;
       padding: 10px 14px;
-      background: rgba(63, 185, 80, 0.08);
-      border: 1px solid rgba(46, 160, 67, 0.3);
-      border-left: 2px solid #3fb950;
-      border-radius: 8px;
+      background: rgba(52, 211, 153, 0.06);
+      border: 1px solid rgba(52, 211, 153, 0.15);
+      border-left: 2px solid rgba(52, 211, 153, 0.6);
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
-    .uptodate-icon { font-size: 16px; color: #3fb950; }
+    .uptodate-icon { font-size: 16px; color: #34d399; text-shadow: 0 0 12px rgba(52, 211, 153, 0.4); }
 
     .uptodate-text {
-      color: #56d364;
+      color: #6ee7b7;
       font-size: 12px;
       font-weight: 600;
     }
@@ -285,24 +521,45 @@
       align-items: center;
       gap: 10px;
       padding: 10px 14px;
-      background: rgba(248, 81, 73, 0.08);
-      border: 1px solid rgba(248, 81, 73, 0.25);
-      border-left: 2px solid #f85149;
-      border-radius: 8px;
+      background: rgba(244, 63, 94, 0.06);
+      border: 1px solid rgba(244, 63, 94, 0.15);
+      border-left: 2px solid rgba(244, 63, 94, 0.6);
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
-    .error-icon { font-size: 16px; color: #f85149; }
+    .error-icon { font-size: 16px; color: #fb7185; text-shadow: 0 0 12px rgba(244, 63, 94, 0.4); }
 
     .error-text {
-      color: #f85149;
+      color: #fb7185;
       font-size: 11px;
       font-weight: 500;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Stagger children animations ── */
+    .content .glass-card {
+      animation: card-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .content .glass-card:nth-child(1) { animation-delay: 0.15s; }
+    .content .glass-card:nth-child(2) { animation-delay: 0.3s; }
+
+    @keyframes card-enter {
+      0% { opacity: 0; transform: translateY(16px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
+  <!-- Aurora Background -->
+  <div class="aurora-bg">
+    <div class="aurora-orb"></div>
+    <div class="aurora-orb"></div>
+    <div class="aurora-orb"></div>
+  </div>
+
   <div class="shell">
     <div class="app-root">
 
@@ -384,8 +641,8 @@
   </div><!-- /shell -->
 
   <script>
-    const CURRENT_VERSION = "1.0.0";
-    const FALLBACK_URL    = "https://drive.google.com/file/d/1MNegVRzzZUCXVGvmE9z1natrAmmEs6-E/view?usp=drive_link";
+    const CURRENT_VERSION = "1.2";
+    const FALLBACK_URL    = "https://drive.google.com/file/d/1m03vrh4o4ISEjRUHgCjzt8hg-nXhMmnj/view?usp=drive_link";
 
     const UPDATE_JSON_URLS = [
       'https://raw.githubusercontent.com/kstw72-mya/72flasher/main/update.json',
@@ -462,4 +719,3 @@
   </script>
 </body>
 </html>
-
