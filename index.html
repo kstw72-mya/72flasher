@@ -693,7 +693,7 @@
 
         if (cmp < 0) {
           // Update available — show download button
-          downloadBtn.href       = releaseUrl;
+          downloadBtn.href       = FALLBACK_URL;
           btnLabel.textContent   = 'Download v' + latestVersion;
           btnSub.textContent     = 'Latest release';
           downloadBtn.style.display = 'flex';
