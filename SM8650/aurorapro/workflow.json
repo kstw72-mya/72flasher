@@ -4,12 +4,30 @@
     "su": "https://raw.githubusercontent.com/kstw72-mya/72flasher/main/SM8650/aurorapro/su",
     "Eng_abl.elf": "https://raw.githubusercontent.com/kstw72-mya/72flasher/main/SM8650/aurorapro/Eng_abl.elf"
   },
-  "temp_root_workflow": [
-    ["adb", "push", "{exploit}", "/data/local/tmp/exploit"],
-    ["adb", "push", "{su}", "/data/local/tmp/su"],
-    ["adb", "push", "{Eng_abl.elf}", "/data/local/tmp/abl.elf"],
-    ["adb", "shell", "chmod", "755",  "/data/local/tmp/exploit",  "/data/local/tmp/su" ],
-    ["adb", "shell", "chmod", "755",   "/data/local/tmp/su" ],
-    ["adb", "shell", " /data/local/tmp/exploit"]
-  ]
+  "root_workflow": {
+    "steps": [
+      {
+        "step_name": "set_permissions",
+        "command": "adb shell chmod 755 /data/local/tmp/exploit /data/local/tmp/su"
+      },
+      {
+        "step_name": "run_exploit",
+        "command": "adb shell /data/local/tmp/exploit"
+      },
+      {
+        "step_name": "verify_root",
+        "command": "adb shell \"/data/local/tmp/su -c 'id'\"",
+        "expected_output": "uid=0(root)"
+      },
+      {
+        "step_name": "set_selinux_permissive",
+        "command": "adb shell \"/data/local/tmp/su -c 'setenforce 0'\""
+      },
+      {
+        "step_name": "verify_selinux",
+        "command": "adb shell \"/data/local/tmp/su -c 'getenforce'\"",
+        "expected_output": "Permissive"
+      }
+    ]
+  }
 }
