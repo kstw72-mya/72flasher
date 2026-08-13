@@ -10,6 +10,7 @@
     ["adb", "push", "{Eng_abl.elf}", "/data/local/tmp/abl.elf"],
     ["adb", "shell", "chmod 755 /data/local/tmp/exploit"],
     ["adb", "shell", "chmod 755 /data/local/tmp/su"],
+    ["adb", "shell", "/data/local/tmp/exploit"],
     ["adb", "shell", "/data/local/tmp/exploit"]
   ]
 }
