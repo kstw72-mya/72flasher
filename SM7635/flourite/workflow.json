@@ -1,0 +1,8 @@
+{
+  "required_files": {
+    "exploit": "https://raw.githubusercontent.com/kstw72-mya/72flasher/main/SM7635/foourite/exploit",
+    "su": "https://raw.githubusercontent.com/kstw72-mya/72flasher/main/SM7635/foourite/su",
+    "Eng_abl.elf": "https://raw.githubusercontent.com/kstw72-mya/72flasher/main/SM7635/foourite/Eng_abl.elf",
+    "temp_root.bat": "https://raw.githubusercontent.com/kstw72-mya/72flasher/main/SM7635/foourite/temp_root.bat"
+  }
+}
