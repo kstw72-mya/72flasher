@@ -1,0 +1,7 @@
+{
+  "required_files": {
+    "preload-8sgen4.so": "https://raw.githubusercontent.com/kstw72-mya/72flasher/main/SM8735/onyx/6.6.118/preload-8sgen4.so",
+    "Eng_abl.elf": "https://raw.githubusercontent.com/kstw72-mya/72flasher/main/SM8735/onyx/6.6.118/Eng_abl.elf",
+    "temp_root.bat": "https://raw.githubusercontent.com/kstw72-mya/72flasher/main/SM8735/onyx/6.6.118/temp_root.bat"
+  }
+}
