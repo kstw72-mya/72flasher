@@ -1,6 +1,8 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
+set "WORKFLOW_LOG=%~dp0.workflow.log"
+del /q "%WORKFLOW_LOG%" >nul 2>&1
 
 if not exist "ghostlock" exit /b 1
 if not exist "ksud" exit /b 1
@@ -30,7 +32,7 @@ if exist "offsets.json" (
     if errorlevel 1 exit /b 1
 )
 
-adb shell /data/local/tmp/ghostlock >nul 2>&1
+adb shell /data/local/tmp/ghostlock >"%WORKFLOW_LOG%" 2>&1
 if errorlevel 1 exit /b 1
 
 for /f "delims=" %%i in ('adb shell "su -c id" 2^>^&1') do (
